@@ -2,70 +2,70 @@
 
 checkExit() {
     if [ ! $? -eq 0 ] ; then
-      echo "Ein Fehler ist aufgetreten. (Fehlercode $?)";
+      echo "An error has occured. (Error code $?)";
       exit 1;
     fi
 }
 
 askContinue() {
     while true; do
-        read -p "$1 (j/n)" yn
+        read -p "$1 (y/n)" yn
         case $yn in
-            [Jj]* ) break;;
-            [Nn]* ) echo 'Abgebrochen.'; exit 2;;
-            * ) echo 'Bitte drücke "j" (ja) oder (n)ein antworten."';;
+            [Yy]* ) break;;
+            [Nn]* ) echo 'Aborted.'; exit 2;;
+            * ) echo 'Press to answer "y" (yes) or "n" (no)."';;
         esac
     done
 }
 
-echo "\n\n\nBITTE LIES DEN FOLGENDEN HINWEIS BEVOR DU WEITERMACHST!!!\n\n\n"
+echo "\n\n\nPLEASE READ THE FOLLOWING TEXT CAREFULLY BEFORE YOU CONTINUE!!!\n\n\n"
 
-echo "Hallo $USER!\n"
-echo 'Aus organisatorischen Gründen hat sich die Internet-Adresse (Basisdomain) des Tox Projektes geändert. Dieses Skript ersetzt das installierte QTox mit einer aktualisierten Version. Die alte Adresse (Basisdomäne) "tox.im" ist NICHT MEHR GÜLTIG und wurde durch "tox.chat" ersetzt.'
+echo "Hello $USER!\n"
+echo 'Because of changes in our organisation, the domain name (internet address) of the Tox Project has changed.  This script will replace the installed QTox version with an updated one. The old domain "tox.im" IS INVALID and was replaced with "tox.chat".'
 echo ''
-echo 'Mehr Details zum Thema findest Du in folgendem (englischen) Blogeintrag:
+echo 'The reasons behind this process can be found at: 
 https://blog.tox.chat/2015/07/current-situation-3/'
 echo ''
-echo '----- BESCHREIBUNG -----
-Das Skript nimmt folgende Änderungen an Deinem System vor:
-Schritt 1: QTox wird zunächst deinstalliert!
-Schritt 2: Der Installationsschlüssel wird ersetzt.
-           (siehe https://pkg.tox.chat/pubkey.gpg)
-Schritt 3: Die APT Paketquellen werden aktualisiert.
-Schritt 4: Auf Wunsch wird QTox installiert.
+echo '----- DESCRIPTION -----
+The script does the following to your system:
+Step 1: QTox will be removed!
+Step 2: The signing key will be replaced.
+           (see https://pkg.tox.chat/pubkey.gpg)
+Step 3: The APT repositorys will be updated.
+Step 4: If you wish, QTox will be installed again.
 -------------------------
 '
 
 
-askContinue 'Zum weitermachen benotigst Du Dein Passwort. Weiter?' ; checkExit
+askContinue 'Your password is needed to continue. Continue?' ; checkExit
 
 
-echo 'Entferne QTox, falls vorhanden...'
+echo 'Removing QTox if installed...'
 sudo apt-get purge -y qtox ; checkExit
 
 #remove old key
-echo 'Entferne den alten Installationsschlüssel (0C2E03A0)...'
+echo 'Removing old signing key (0C2E03A0)...'
 sudo apt-key del 0C2E03A0 ; checkExit
  
-echo 'Ersetze die Datei /etc/apt/sources.list.d/tox.list (enthält die neue APT-Paketquelle)'
+echo 'Replacing /etc/apt/sources.list.d/tox.list (contains new APT Repository)'
 sudo sh -c 'echo "deb https://pkg.tox.chat/ nightly main" > /etc/apt/sources.list.d/tox.list' ; checkExit
 
-echo 'Hole und registriere den neuen Installationsschlüssel von https://pkg.tox.chat/pubkey.gpg ...'
+echo 'Getting and installing new signing key from https://pkg.tox.chat/pubkey.gpg ...'
 wget -qO - https://pkg.tox.chat/pubkey.gpg | sudo apt-key add - ; checkExit
 
-echo 'Aktualisiere die APT-Paketquellen. Das kann einige Minuten dauern...'
+echo 'Updating APT Repositories. This may take a few minutes...'
 sudo apt-get update -qq ; checkExit
 
-echo 'Installiere für Tox notwendige Pakete...'
+echo 'Installing Tox dependencies...'
 sudo apt install -y apt-transport-https ; checkExit
-echo 'Die Tox Paketquelle (PPA) wurde installiert.'
+echo 'Tox Repository (PPA) installed successfully.'
 
-askContinue 'Soll ich das neue QTox installieren?'
+askContinue 'Install new QTox?'
 sudo apt install -y qtox ; checkExit
 
 
 echo '
 ----------------------------------------
-| QTox wurde erfolgreich aktualisiert. |
+| QTox updated successfully. |
 ----------------------------------------
 '
