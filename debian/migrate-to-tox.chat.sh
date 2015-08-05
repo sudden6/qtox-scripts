@@ -2,70 +2,71 @@
 
 checkExit() {
     if [ ! $? -eq 0 ] ; then
-      echo "Ein Fehler ist aufgetreten. (Fehlercode $?)";
+      echo "An error has occurred. (Error code $?)";
       exit 1;
     fi
 }
 
 askContinue() {
     while true; do
-        read -p "$1 (j/n)" yn
+        read -p "$1 (Y/n)" yn
         case $yn in
-            [Jj]* ) break;;
-            [Nn]* ) echo 'Abgebrochen.'; exit 2;;
-            * ) echo 'Bitte drücke "j" (ja) oder (n)ein antworten."';;
+            [Yy]* ) break;;
+            [Nn]* ) echo 'Canceled.'; exit 2;;
+            * ) echo 'Are you sure ? (Y/n)';;
         esac
     done
 }
 
-echo "\n\n\nBITTE LIES DEN FOLGENDEN HINWEIS BEVOR DU WEITERMACHST!!!\n\n\n"
+echo "\n\n\nPLEASE READ THE NOTE BELOW BEFORE YOU CONTINUE!!!\n\n\n"
 
-echo "Hallo $USER!\n"
-echo 'Aus organisatorischen Gründen hat sich die Internet-Adresse (Basisdomain) des Tox Projektes geändert. Dieses Skript ersetzt das installierte QTox mit einer aktualisierten Version. Die alte Adresse (Basisdomäne) "tox.im" ist NICHT MEHR GÜLTIG und wurde durch "tox.chat" ersetzt.'
+echo "Hello $USER!\n"
+echo 'For organisational reasons, the Tox Project URL has changed from `tox.im` to `tox.chat`. This script replaces the installed qTox with an updated version.'
 echo ''
-echo 'Mehr Details zum Thema findest Du in folgendem (englischen) Blogeintrag:
+echo 'You can find more details on the current situation in the following blog entry:
 https://blog.tox.chat/2015/07/current-situation-3/'
 echo ''
-echo '----- BESCHREIBUNG -----
-Das Skript nimmt folgende Änderungen an Deinem System vor:
-Schritt 1: QTox wird zunächst deinstalliert!
-Schritt 2: Der Installationsschlüssel wird ersetzt.
-           (siehe https://pkg.tox.chat/pubkey.gpg)
-Schritt 3: Die APT Paketquellen werden aktualisiert.
-Schritt 4: Auf Wunsch wird QTox installiert.
+echo '----- DESCRIPTION -----
+The script makes the following changes to your system:
+Step 1: qTox will first be uninstalled!
+Step 2: The installation key will be replaced to the new one.
+           (see https://pkg.tox.chat/pubkey.gpg)
+Step 3: The APT package source will be updated.
+Step 4: qTox is installed via the new APT repository for Tox Project.
 -------------------------
 '
 
 
-askContinue 'Zum weitermachen benotigst Du Dein Passwort. Weiter?' ; checkExit
+askContinue 'To use this script you will be asked to enter your sudo password
+        (asked by the system, not by the script)' ; checkExit
 
 
-echo 'Entferne QTox, falls vorhanden...'
+echo 'If qTox is installed, deleting it...'
 sudo apt-get purge -y qtox ; checkExit
 
 #remove old key
-echo 'Entferne den alten Installationsschlüssel (0C2E03A0)...'
+echo 'Removing the old installation key (0C2E03A0)...'
 sudo apt-key del 0C2E03A0 ; checkExit
- 
-echo 'Ersetze die Datei /etc/apt/sources.list.d/tox.list (enthält die neue APT-Paketquelle)'
+
+echo 'Editing the file `/ etc/apt/sources.list.d/tox.list` (which contains the new Tox Project APT repository)'
 sudo sh -c 'echo "deb https://pkg.tox.chat/ nightly main" > /etc/apt/sources.list.d/tox.list' ; checkExit
 
-echo 'Hole und registriere den neuen Installationsschlüssel von https://pkg.tox.chat/pubkey.gpg ...'
+echo 'Downloading and signing the new installation key from https://pkg.tox.chat/pubkey.gpg'
 wget -qO - https://pkg.tox.chat/pubkey.gpg | sudo apt-key add - ; checkExit
 
-echo 'Aktualisiere die APT-Paketquellen. Das kann einige Minuten dauern...'
+echo 'Updating the Tox Project APT repositories. This may take several times...'
 sudo apt-get update -qq ; checkExit
 
-echo 'Installiere für Tox notwendige Pakete...'
+echo 'Installing necessary packages for Tox...'
 sudo apt install -y apt-transport-https ; checkExit
-echo 'Die Tox Paketquelle (PPA) wurde installiert.'
+echo 'The Tox Project package source (PPA) has been installed.'
 
-askContinue 'Soll ich das neue QTox installieren?'
+askContinue 'Should I install qTox from the new official repository?'
 sudo apt install -y qtox ; checkExit
 
 
 echo '
 ----------------------------------------
-| QTox wurde erfolgreich aktualisiert. |
+| qTox has been updated successfully.  |
 ----------------------------------------
 '
