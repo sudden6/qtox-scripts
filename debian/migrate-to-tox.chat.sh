@@ -64,8 +64,8 @@ askContinue 'Soll ich das neue QTox installieren?'
 sudo apt install -y qtox ; checkExit
 
 
-echo ''
-echo '-------------------------'
-echo ''
-
-echo 'Glückwunsch! QTox wurde erfolgreich aktualisiert.'
+echo '
+----------------------------------------
+| QTox wurde erfolgreich aktualisiert. |
+----------------------------------------
+'
