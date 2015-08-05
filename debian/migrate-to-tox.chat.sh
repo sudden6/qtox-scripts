@@ -12,8 +12,8 @@ askContinue() {
         read -p "$1 (Y/n)" yn
         case $yn in
             [Yy]* ) break;;
-            [Nn]* ) echo 'Canceled.'; exit 2;;
-            * ) echo 'Are you sure ? (Y/n)';;
+            [Nn]* ) echo 'Aborted.'; exit 2;;
+            * ) echo 'Press to answer "y" (yes) or "n" (no)."';;
         esac
     done
 }
