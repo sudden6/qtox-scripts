@@ -13,20 +13,19 @@ askContinue() {
         case $on in
             [On]* ) break;;
             [Nn]* ) echo 'Annulé.'; exit 2;;
-            * ) echo 'Êtes-vous sûr(e) ? (O/n)';;
+            * ) echo 'Êtes-vous sûr(e) ? (O/n) ';;
         esac
     done
 }
 
-echo "\n\n\nMERCI DE LIRE LES NOTES CI-DESSOUS AVANT DE CONTINUER !!!\n\n\n"
+echo "\n\n\nMERCI DE LIRE LES NOTES CI-DESSOUS AVANT DE CONTINUER !!!\n\n"
 
 echo "Bonjour $USER !\n"
-echo "Pour des questions d'organisation, l'URL officiel du Projet Tox a changé de `tox.im` vers `tox.chat`. Ce script remplace la version actuelle de qTox avec celle du nouveau dépôt APT officiel."
-echo ''
-echo "Vous pourrez trouver plus d'informations à propos de la situation actuelle en lisant ce post (en anglais) : 
-https://blog.tox.chat/2015/07/current-situation-3/"
-echo ''
-echo "----- DESCRIPTION -----
+echo "Pour des questions d'organisation, l'URL officiel du Projet Tox a changé de 'tox.im' vers 'tox.chat'.
+Ce script remplace la version actuelle de qTox avec celle du nouveau dépôt APT officiel.\n"
+echo "Vous pourrez trouver plus d'informations à propos de la situation actuelle en lisant ce post :
+          [en] https://blog.tox.chat/2015/07/current-situation-3/\n"
+echo "------ DESCRIPTION ------
 Le script effectue les modifications suivantes sur votre système :
 Étape 1: qTox va être désinstallé.
 Étape 2: L'ancienne clé d'installation va être remplacée par la nouvelle.
@@ -36,10 +35,8 @@ Le script effectue les modifications suivantes sur votre système :
 -------------------------
 "
 
-
 askContinue 'En utilisant ce script il se peut que votre mot de passe (sudo) soit demandé
         (demande du système, non pas du script)' ; checkExit
-
 
 echo 'Si qTox est installé, on le supprime...'
 sudo apt-get purge -y qtox ; checkExit
@@ -48,10 +45,11 @@ sudo apt-get purge -y qtox ; checkExit
 echo "Suppression de l'ancienne clé d'installation (0C2E03A0)..."
 sudo apt-key del 0C2E03A0 ; checkExit
 
-echo 'Modification du fichier `/ etc/apt/sources.list.d/tox.list` (ajout de la nouvelle clé d'installation)...'
+echo "Modification du fichier '/ etc/apt/sources.list.d/tox.list' (ajout de la nouvelle clé d'installation)..."
 sudo sh -c 'echo "deb https://pkg.tox.chat/ nightly main" > /etc/apt/sources.list.d/tox.list' ; checkExit
 
-echo 'Téléchargement et certification de la nouvelle clé d'installation depuis https://pkg.tox.chat/pubkey.gpg'
+echo "Téléchargement et certification de la nouvelle clé d'installation depuis
+          https://pkg.tox.chat/pubkey.gpg"
 wget -qO - https://pkg.tox.chat/pubkey.gpg | sudo apt-key add - ; checkExit
 
 echo 'Mise à jour du dépôt APT du Projet Tox. Cela peut prendre quelques instants...'
