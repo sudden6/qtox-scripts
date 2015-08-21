@@ -59,7 +59,7 @@ msgid ""
 msgstr ""
 "\n"
 "Aus organisatorischen Gründen hat sich die Internet-Adresse (Basisdomain) des "
-"Tox Projektes geändert. Dieses Skript ersetzt das installierte QTox mit einer "
+"Tox Projektes geändert. Dieses Skript ersetzt das installierte qTox mit einer "
 "aktualisierten Version. Die alte Adresse (Basisdomäne) `tox.im` ist NICHT "
 "MEHR GÜLTIG und wurde durch `tox.chat` ersetzt."
 
@@ -89,11 +89,11 @@ msgstr ""
 "\n"
 "----- BESCHREIBUNG -----
 Das Skript nimmt folgende Änderungen an Deinem System vor:
-Schritt 1: QTox wird zunächst deinstalliert!
+Schritt 1: qTox wird zunächst deinstalliert!
 Schritt 2: Der Installationsschlüssel wird ersetzt.
            (siehe https://pkg.tox.chat/pubkey.gpg)
 Schritt 3: Die APT Paketquellen werden aktualisiert.
-Schritt 4: Auf Wunsch wird QTox installiert.
+Schritt 4: Auf Wunsch wird qTox installiert.
 -------------------------\n"
 
 #: migrate-to-tox.chat.sh:61
@@ -142,5 +142,5 @@ msgid ""
 msgstr ""
 "\n"
 "----------------------------------------\n"
-"| QTox wurde erfolgreich aktualisiert. |\n"
+"| qTox wurde erfolgreich aktualisiert. |\n"
 "----------------------------------------\n"
